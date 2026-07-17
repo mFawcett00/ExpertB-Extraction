@@ -3,9 +3,33 @@ import shutil
 from pathlib import Path
 import requests
 import time
-import re
+from dotenv import load_dotenv
+from azure.identity import AzureCliCredential
+from azure.keyvault.secrets import SecretClient
+from azure.core.settings import settings
 
-from playwright.sync_api import expect
+# GET USER AND PASSWORD FROM AZURE KEY VAULT
+def get_creds(logger):
+    load_dotenv()
+
+    client = SecretClient(vault_url=os.getenv("VAULT_URL"), credential=AzureCliCredential())
+    settings.tracing_enabled = False
+
+    try:
+        user = client.get_secret(os.getenv("KV_USER")).value
+        logger.info(f"Usuario: {user}")
+    except:
+        logger.error("Se detectó un error de al solicitar el secreto del usuario")
+        raise ValueError("Error al solicitar secreto: no fue posible traer el valor del usuario")
+
+    try:
+        password = client.get_secret(os.getenv("KV_PASSWORD"),tracing_options={"enabled": False}).value
+        logger.info(f"Se obtuvo la contraseña exitosamente")
+    except:
+        logger.error("Se detectó un error de al solicitar el secreto del contraseña")
+        raise ValueError("Error al solicitar secreto: no fue posible traer el valor del contraseña")
+
+    return user, password
 
 
 # MOVE FILES FROM INPUT FOLDER TO ARCHIVED FOLDER
