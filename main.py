@@ -116,11 +116,18 @@ def main():
             break
 
         except BaseException as ex:
-            #context.close()
-            #browser.close()
-            attempts += attempts
+            try:
+                context.close()
+            except Exception:
+                pass
+            try:
+                browser.close()
+            except Exception:
+                pass
+            attempts += 1
             logger.error(f"Ha habido una excepción: {type(ex)} - {str(ex)}")
             last_error = ex
+            time.sleep(5)
 
 
     if last_error is None:
@@ -136,9 +143,10 @@ def main():
 
     os.remove(LOG_PATH)
 
-schedule.every().day.at("01:00").do(main)
+schedule.every().day.at("11:00").do(main)
+schedule.every().day.at("18:53").do(main)
 
-print("Starting the automatic workflow... (Ctrl+C to stop)")
+logger.info("Starting the automatic workflow... (Ctrl+C to stop)")
 
 while True:
     try:

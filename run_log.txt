@@ -1,0 +1,14 @@
+[Thu 07/23/2026  5:36:06.09] Starting script 
+[Thu 07/23/2026  5:36:06.25] Running as: GBSAmericas.Bot / Profile: C:\Users\GBSAmericas.Bot 
+{
+  "environmentName": "AzureCloud",
+  "id": "038d1eb6-c4ba-4396-9150-1ad91c9469c6",
+  "isDefault": true,
+  "name": "N/A(tenant level account)",
+  "state": "Enabled",
+  "tenantId": "038d1eb6-c4ba-4396-9150-1ad91c9469c6",
+  "user": {
+    "name": "CentreOfExcellence@inchcape.com.sg",
+    "type": "user"
+  }
+}

@@ -248,20 +248,20 @@ def send_email (tracer_logger, type, path, errormessage):
     if (type == "Logs"):
         payload = {
             "key": os.getenv('EMAIL_KEY'),
-            "color": "purple",
+            "color": "green",
             "attachment": file_bytes_str,
             "filename" : filename,
             "from": os.getenv('EMAIL_FROM'),
             "to": os.getenv('EMAIL_TO_LOG').split(','),
             "cc": os.getenv('EMAIL_CC_LOG').split(','),
-            "title": "Expert-B Extraction - Logs",
-            "subject": "Expert-B Extraction - Logs",
+            "title": "Expert-B Extraction - Success Run",
+            "subject": "Expert-B Extraction - Success Run",
             "message": f"Hi team, <br><br> This is the logs file for the <b>Expert-B Extraction</b> bot. Please review it if needed."
         }
     elif (type == "Error"):
         payload = {
             "key": os.getenv('EMAIL_KEY'),
-            "color": "orange",
+            "color": "red",
             "attachment": file_bytes_str,
             "filename": filename,
             "from": os.getenv('EMAIL_FROM'),
