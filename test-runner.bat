@@ -1,0 +1,2 @@
+@echo off
+cmd /k "cd /d C:\Users\GBSAmericas.Bot\PycharmProjects\ExpertB-Extraction\.venv\Scripts & call activate.bat & cd /d C:\Users\GBSAmericas.Bot\PycharmProjects\ExpertB-Extraction & python main-test.py"

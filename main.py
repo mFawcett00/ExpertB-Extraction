@@ -144,7 +144,7 @@ def main():
     os.remove(LOG_PATH)
 
 schedule.every().day.at("11:00").do(main)
-schedule.every().day.at("18:53").do(main)
+#schedule.every().day.at("23:00").do(main)
 
 logger.info("Starting the automatic workflow... (Ctrl+C to stop)")
 
