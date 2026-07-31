@@ -197,29 +197,71 @@ def descargar_reporte(
     reporte_page = popup_info.value
 
     # Descargar Excel
-    with reporte_page.expect_download() as download_info:
+    downloads = []
+    reporte_page.context.on("download", lambda d: downloads.append(d))
 
-        with reporte_page.expect_popup() as export_popup:
+    with reporte_page.expect_popup() as export_popup:
+        reporte_page.get_by_role(
+            "button",
+            name="Exportar como archivo de Excel"
+        ).click()
+        logger.info("Exportando archivo en excel...")
 
-            reporte_page.get_by_role(
-                "button",
-                name="Exportar como archivo de Excel"
-            ).click()
-            logger.info("Exportando archivo en excel...")
+    # Give the download time to actually fire, on whichever page it lands
+    reporte_page.wait_for_timeout(5000)
 
-    download = download_info.value
+    if not downloads:
+        # last resort: wait a bit longer explicitly
+        reporte_page.context.wait_for_event("download", timeout=30000)
 
-    archivo = os.path.join(
-        DOWNLOAD_PATH,
-        f"{nombre_archivo}_{today}.xlsx"
-    )
+    download = downloads[0] if downloads else None
+    if download is None:
+        reporte_page.screenshot(path=f"debug_no_download_{today}.png")
+        raise Exception("No se detectó ninguna descarga")
 
+    respuesta = download.headers
+    logger.info(respuesta)
+
+    archivo = os.path.join(DOWNLOAD_PATH, f"{nombre_archivo}_{today}.xlsx")
     download.save_as(archivo)
-
     logger.info(f"Archivo descargado: {archivo}")
 
+    # Descargar Excel
+    #with reporte_page.expect_download(timeout=180_000) as download_info:
+
+        #with reporte_page.expect_popup() as export_popup:
+
+    #        reporte_page.get_by_role(
+    #            "button",
+    #            name="Exportar como archivo de Excel"
+    #        ).click()
+    #        logger.info("Exportando archivo en excel...")
+    #        logger.info(str(download_info.response()))
+    #        logger.info("after excel log")
+
+            #respuesta = await download.response()
+            #print(respuesta.headers())
+
+    #download = download_info.value
+
+    #archivo = os.path.join(
+    #    DOWNLOAD_PATH,
+    #    f"{nombre_archivo}_{today}.xlsx"
+    #)
+
+    #try:
+        #os.makedirs(DOWNLOAD_PATH, exist_ok=True)
+        #download.save_as(archivo)
+        #logger.info(f"Archivo descargado: {archivo}")
+    #except:
+        #pass
+
+        #download.save_as(archivo)
+
+        #logger.info(f"Archivo descargado: {archivo}")
+
     # Cerrar popup exportación
-    export_popup.value.close()
+    #export_popup.value.close()
 
     # Popup error opcional
     try:

@@ -69,7 +69,7 @@ RUN_AFTER_HOUR = 11
 RUN_AFTER_MINUTE = 0
 
 # How old a report file can be before it's considered stale (triggers the catch-up safety net)
-STALE_FILE_THRESHOLD_HOURS = 20
+STALE_FILE_THRESHOLD_HOURS = 24
 
 
 def get_file_datetime(filepath):
